@@ -20,15 +20,17 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	LinkedonService_CreatePerson_FullMethodName = "/linkedon.LinkedonService/CreatePerson"
-	LinkedonService_Follow_FullMethodName       = "/linkedon.LinkedonService/Follow"
+	LinkedonService_FollowPerson_FullMethodName = "/linkedon.LinkedonService/FollowPerson"
+	LinkedonService_Reset_FullMethodName        = "/linkedon.LinkedonService/Reset"
 )
 
 // LinkedonServiceClient is the client API for LinkedonService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LinkedonServiceClient interface {
-	CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*CreatePersonResponse, error)
-	Follow(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowResponse, error)
+	CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*Response, error)
+	FollowPerson(ctx context.Context, in *FollowPersonRequest, opts ...grpc.CallOption) (*Response, error)
+	Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
 type linkedonServiceClient struct {
@@ -39,9 +41,9 @@ func NewLinkedonServiceClient(cc grpc.ClientConnInterface) LinkedonServiceClient
 	return &linkedonServiceClient{cc}
 }
 
-func (c *linkedonServiceClient) CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*CreatePersonResponse, error) {
+func (c *linkedonServiceClient) CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreatePersonResponse)
+	out := new(Response)
 	err := c.cc.Invoke(ctx, LinkedonService_CreatePerson_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -49,10 +51,20 @@ func (c *linkedonServiceClient) CreatePerson(ctx context.Context, in *CreatePers
 	return out, nil
 }
 
-func (c *linkedonServiceClient) Follow(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowResponse, error) {
+func (c *linkedonServiceClient) FollowPerson(ctx context.Context, in *FollowPersonRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FollowResponse)
-	err := c.cc.Invoke(ctx, LinkedonService_Follow_FullMethodName, in, out, cOpts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, LinkedonService_FollowPerson_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *linkedonServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, LinkedonService_Reset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +75,9 @@ func (c *linkedonServiceClient) Follow(ctx context.Context, in *FollowRequest, o
 // All implementations must embed UnimplementedLinkedonServiceServer
 // for forward compatibility.
 type LinkedonServiceServer interface {
-	CreatePerson(context.Context, *CreatePersonRequest) (*CreatePersonResponse, error)
-	Follow(context.Context, *FollowRequest) (*FollowResponse, error)
+	CreatePerson(context.Context, *CreatePersonRequest) (*Response, error)
+	FollowPerson(context.Context, *FollowPersonRequest) (*Response, error)
+	Reset(context.Context, *ResetRequest) (*Response, error)
 	mustEmbedUnimplementedLinkedonServiceServer()
 }
 
@@ -75,11 +88,14 @@ type LinkedonServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedLinkedonServiceServer struct{}
 
-func (UnimplementedLinkedonServiceServer) CreatePerson(context.Context, *CreatePersonRequest) (*CreatePersonResponse, error) {
+func (UnimplementedLinkedonServiceServer) CreatePerson(context.Context, *CreatePersonRequest) (*Response, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreatePerson not implemented")
 }
-func (UnimplementedLinkedonServiceServer) Follow(context.Context, *FollowRequest) (*FollowResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Follow not implemented")
+func (UnimplementedLinkedonServiceServer) FollowPerson(context.Context, *FollowPersonRequest) (*Response, error) {
+	return nil, status.Error(codes.Unimplemented, "method FollowPerson not implemented")
+}
+func (UnimplementedLinkedonServiceServer) Reset(context.Context, *ResetRequest) (*Response, error) {
+	return nil, status.Error(codes.Unimplemented, "method Reset not implemented")
 }
 func (UnimplementedLinkedonServiceServer) mustEmbedUnimplementedLinkedonServiceServer() {}
 func (UnimplementedLinkedonServiceServer) testEmbeddedByValue()                         {}
@@ -120,20 +136,38 @@ func _LinkedonService_CreatePerson_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LinkedonService_Follow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FollowRequest)
+func _LinkedonService_FollowPerson_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FollowPersonRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LinkedonServiceServer).Follow(ctx, in)
+		return srv.(LinkedonServiceServer).FollowPerson(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LinkedonService_Follow_FullMethodName,
+		FullMethod: LinkedonService_FollowPerson_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LinkedonServiceServer).Follow(ctx, req.(*FollowRequest))
+		return srv.(LinkedonServiceServer).FollowPerson(ctx, req.(*FollowPersonRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LinkedonService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LinkedonServiceServer).Reset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LinkedonService_Reset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LinkedonServiceServer).Reset(ctx, req.(*ResetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -150,8 +184,12 @@ var LinkedonService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LinkedonService_CreatePerson_Handler,
 		},
 		{
-			MethodName: "Follow",
-			Handler:    _LinkedonService_Follow_Handler,
+			MethodName: "FollowPerson",
+			Handler:    _LinkedonService_FollowPerson_Handler,
+		},
+		{
+			MethodName: "Reset",
+			Handler:    _LinkedonService_Reset_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

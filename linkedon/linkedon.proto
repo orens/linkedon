@@ -5,8 +5,9 @@ package linkedon;
 option go_package = "github.com/orens/linkedon/linkedon";
 
 service LinkedonService {
-    rpc CreatePerson(CreatePersonRequest) returns (CreatePersonResponse);
-    rpc Follow(FollowRequest) returns (FollowResponse);
+    rpc CreatePerson(CreatePersonRequest) returns (Response);
+    rpc FollowPerson(FollowPersonRequest) returns (Response);
+    rpc Reset(ResetRequest) returns (Response);
 }
 
 message Person {
@@ -19,15 +20,16 @@ message CreatePersonRequest {
     Person person = 1;
 }
 
-message CreatePersonResponse {
-    bool success = 1;
-}
 
-message FollowRequest {
+message FollowPersonRequest {
     int32 followerId = 1;
     int32 followeeId = 2;
 }
 
-message FollowResponse {
+message ResetRequest {
+}
+
+message Response {
     bool success = 1;
+    string extra = 2;
 }
