@@ -169,28 +169,28 @@ func (x *CreatePersonResponse) GetSuccess() bool {
 	return false
 }
 
-type ConnectRequest struct {
+type FollowRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Person1Id     int32                  `protobuf:"varint,1,opt,name=person1Id,proto3" json:"person1Id,omitempty"`
-	Person2Id     int32                  `protobuf:"varint,2,opt,name=person2Id,proto3" json:"person2Id,omitempty"`
+	FollowerId    int32                  `protobuf:"varint,1,opt,name=followerId,proto3" json:"followerId,omitempty"`
+	FolloweeId    int32                  `protobuf:"varint,2,opt,name=followeeId,proto3" json:"followeeId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ConnectRequest) Reset() {
-	*x = ConnectRequest{}
+func (x *FollowRequest) Reset() {
+	*x = FollowRequest{}
 	mi := &file_linkedon_linkedon_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ConnectRequest) String() string {
+func (x *FollowRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ConnectRequest) ProtoMessage() {}
+func (*FollowRequest) ProtoMessage() {}
 
-func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
+func (x *FollowRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_linkedon_linkedon_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -202,46 +202,46 @@ func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
-func (*ConnectRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use FollowRequest.ProtoReflect.Descriptor instead.
+func (*FollowRequest) Descriptor() ([]byte, []int) {
 	return file_linkedon_linkedon_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ConnectRequest) GetPerson1Id() int32 {
+func (x *FollowRequest) GetFollowerId() int32 {
 	if x != nil {
-		return x.Person1Id
+		return x.FollowerId
 	}
 	return 0
 }
 
-func (x *ConnectRequest) GetPerson2Id() int32 {
+func (x *FollowRequest) GetFolloweeId() int32 {
 	if x != nil {
-		return x.Person2Id
+		return x.FolloweeId
 	}
 	return 0
 }
 
-type ConnectResponse struct {
+type FollowResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ConnectResponse) Reset() {
-	*x = ConnectResponse{}
+func (x *FollowResponse) Reset() {
+	*x = FollowResponse{}
 	mi := &file_linkedon_linkedon_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ConnectResponse) String() string {
+func (x *FollowResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ConnectResponse) ProtoMessage() {}
+func (*FollowResponse) ProtoMessage() {}
 
-func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
+func (x *FollowResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_linkedon_linkedon_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -253,12 +253,12 @@ func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ConnectResponse.ProtoReflect.Descriptor instead.
-func (*ConnectResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use FollowResponse.ProtoReflect.Descriptor instead.
+func (*FollowResponse) Descriptor() ([]byte, []int) {
 	return file_linkedon_linkedon_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ConnectResponse) GetSuccess() bool {
+func (x *FollowResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
@@ -277,15 +277,19 @@ const file_linkedon_linkedon_proto_rawDesc = "" +
 	"\x13CreatePersonRequest\x12(\n" +
 	"\x06person\x18\x01 \x01(\v2\x10.linkedon.PersonR\x06person\"0\n" +
 	"\x14CreatePersonResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"L\n" +
-	"\x0eConnectRequest\x12\x1c\n" +
-	"\tperson1Id\x18\x01 \x01(\x05R\tperson1Id\x12\x1c\n" +
-	"\tperson2Id\x18\x02 \x01(\x05R\tperson2Id\"+\n" +
-	"\x0fConnectResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xa0\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"O\n" +
+	"\rFollowRequest\x12\x1e\n" +
+	"\n" +
+	"followerId\x18\x01 \x01(\x05R\n" +
+	"followerId\x12\x1e\n" +
+	"\n" +
+	"followeeId\x18\x02 \x01(\x05R\n" +
+	"followeeId\"*\n" +
+	"\x0eFollowResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\x9d\x01\n" +
 	"\x0fLinkedonService\x12M\n" +
-	"\fCreatePerson\x12\x1d.linkedon.CreatePersonRequest\x1a\x1e.linkedon.CreatePersonResponse\x12>\n" +
-	"\aConnect\x12\x18.linkedon.ConnectRequest\x1a\x19.linkedon.ConnectResponseB+Z)github.com/yourusername/linkedon/linkedonb\x06proto3"
+	"\fCreatePerson\x12\x1d.linkedon.CreatePersonRequest\x1a\x1e.linkedon.CreatePersonResponse\x12;\n" +
+	"\x06Follow\x12\x17.linkedon.FollowRequest\x1a\x18.linkedon.FollowResponseB$Z\"github.com/orens/linkedon/linkedonb\x06proto3"
 
 var (
 	file_linkedon_linkedon_proto_rawDescOnce sync.Once
@@ -304,15 +308,15 @@ var file_linkedon_linkedon_proto_goTypes = []any{
 	(*Person)(nil),               // 0: linkedon.Person
 	(*CreatePersonRequest)(nil),  // 1: linkedon.CreatePersonRequest
 	(*CreatePersonResponse)(nil), // 2: linkedon.CreatePersonResponse
-	(*ConnectRequest)(nil),       // 3: linkedon.ConnectRequest
-	(*ConnectResponse)(nil),      // 4: linkedon.ConnectResponse
+	(*FollowRequest)(nil),        // 3: linkedon.FollowRequest
+	(*FollowResponse)(nil),       // 4: linkedon.FollowResponse
 }
 var file_linkedon_linkedon_proto_depIdxs = []int32{
 	0, // 0: linkedon.CreatePersonRequest.person:type_name -> linkedon.Person
 	1, // 1: linkedon.LinkedonService.CreatePerson:input_type -> linkedon.CreatePersonRequest
-	3, // 2: linkedon.LinkedonService.Connect:input_type -> linkedon.ConnectRequest
+	3, // 2: linkedon.LinkedonService.Follow:input_type -> linkedon.FollowRequest
 	2, // 3: linkedon.LinkedonService.CreatePerson:output_type -> linkedon.CreatePersonResponse
-	4, // 4: linkedon.LinkedonService.Connect:output_type -> linkedon.ConnectResponse
+	4, // 4: linkedon.LinkedonService.Follow:output_type -> linkedon.FollowResponse
 	3, // [3:5] is the sub-list for method output_type
 	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

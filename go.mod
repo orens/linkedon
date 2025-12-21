@@ -3,6 +3,7 @@ module github.com/orens/linkedon
 go 1.25.5
 
 require (
+	github.com/neo4j/neo4j-go-driver/v6 v6.0.0
 	github.com/orens/linkedon/linkedon v0.0.0-20251218151417-3dceb7af0a0e
 	google.golang.org/grpc v1.77.0
 )
@@ -14,3 +15,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
+
+replace github.com/orens/linkedon/linkedon => ./linkedon

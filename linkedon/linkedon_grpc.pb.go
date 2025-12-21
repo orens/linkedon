@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	LinkedonService_CreatePerson_FullMethodName = "/linkedon.LinkedonService/CreatePerson"
-	LinkedonService_Connect_FullMethodName      = "/linkedon.LinkedonService/Connect"
+	LinkedonService_Follow_FullMethodName       = "/linkedon.LinkedonService/Follow"
 )
 
 // LinkedonServiceClient is the client API for LinkedonService service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LinkedonServiceClient interface {
 	CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*CreatePersonResponse, error)
-	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*ConnectResponse, error)
+	Follow(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowResponse, error)
 }
 
 type linkedonServiceClient struct {
@@ -49,10 +49,10 @@ func (c *linkedonServiceClient) CreatePerson(ctx context.Context, in *CreatePers
 	return out, nil
 }
 
-func (c *linkedonServiceClient) Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*ConnectResponse, error) {
+func (c *linkedonServiceClient) Follow(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*FollowResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ConnectResponse)
-	err := c.cc.Invoke(ctx, LinkedonService_Connect_FullMethodName, in, out, cOpts...)
+	out := new(FollowResponse)
+	err := c.cc.Invoke(ctx, LinkedonService_Follow_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (c *linkedonServiceClient) Connect(ctx context.Context, in *ConnectRequest,
 // for forward compatibility.
 type LinkedonServiceServer interface {
 	CreatePerson(context.Context, *CreatePersonRequest) (*CreatePersonResponse, error)
-	Connect(context.Context, *ConnectRequest) (*ConnectResponse, error)
+	Follow(context.Context, *FollowRequest) (*FollowResponse, error)
 	mustEmbedUnimplementedLinkedonServiceServer()
 }
 
@@ -78,8 +78,8 @@ type UnimplementedLinkedonServiceServer struct{}
 func (UnimplementedLinkedonServiceServer) CreatePerson(context.Context, *CreatePersonRequest) (*CreatePersonResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreatePerson not implemented")
 }
-func (UnimplementedLinkedonServiceServer) Connect(context.Context, *ConnectRequest) (*ConnectResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Connect not implemented")
+func (UnimplementedLinkedonServiceServer) Follow(context.Context, *FollowRequest) (*FollowResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Follow not implemented")
 }
 func (UnimplementedLinkedonServiceServer) mustEmbedUnimplementedLinkedonServiceServer() {}
 func (UnimplementedLinkedonServiceServer) testEmbeddedByValue()                         {}
@@ -120,20 +120,20 @@ func _LinkedonService_CreatePerson_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LinkedonService_Connect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConnectRequest)
+func _LinkedonService_Follow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FollowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LinkedonServiceServer).Connect(ctx, in)
+		return srv.(LinkedonServiceServer).Follow(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LinkedonService_Connect_FullMethodName,
+		FullMethod: LinkedonService_Follow_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LinkedonServiceServer).Connect(ctx, req.(*ConnectRequest))
+		return srv.(LinkedonServiceServer).Follow(ctx, req.(*FollowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -150,8 +150,8 @@ var LinkedonService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _LinkedonService_CreatePerson_Handler,
 		},
 		{
-			MethodName: "Connect",
-			Handler:    _LinkedonService_Connect_Handler,
+			MethodName: "Follow",
+			Handler:    _LinkedonService_Follow_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
