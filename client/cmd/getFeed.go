@@ -24,7 +24,7 @@ var getFeedCmd = &cobra.Command{
 		}
 		for _, post := range feed.Posts {
 			fmt.Printf("--------------------------------\n")
-			fmt.Printf("%d: Posted by %d: %s\n", post.PostId, post.AuthorId, post.Content)
+			fmt.Printf("%d: Posted by %s: %s\n", post.PostId, post.AuthorName, post.Content)
 		}
 		fmt.Printf("---------- END OF FEED --------------------\n")
 		return err

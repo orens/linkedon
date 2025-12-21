@@ -418,6 +418,7 @@ type Post struct {
 	AuthorId      int32                  `protobuf:"varint,1,opt,name=authorId,proto3" json:"authorId,omitempty"`
 	PostId        int32                  `protobuf:"varint,2,opt,name=postId,proto3" json:"postId,omitempty"`
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	AuthorName    string                 `protobuf:"bytes,4,opt,name=authorName,proto3" json:"authorName,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -473,6 +474,13 @@ func (x *Post) GetContent() string {
 	return ""
 }
 
+func (x *Post) GetAuthorName() string {
+	if x != nil {
+		return x.AuthorName
+	}
+	return ""
+}
+
 var File_linkedon_linkedon_proto protoreflect.FileDescriptor
 
 const file_linkedon_linkedon_proto_rawDesc = "" +
@@ -502,11 +510,14 @@ const file_linkedon_linkedon_proto_rawDesc = "" +
 	"\x0eGetFeedRequest\x12\x1a\n" +
 	"\bpersonId\x18\x01 \x01(\x05R\bpersonId\"7\n" +
 	"\x0fGetFeedResponse\x12$\n" +
-	"\x05posts\x18\x01 \x03(\v2\x0e.linkedon.PostR\x05posts\"T\n" +
+	"\x05posts\x18\x01 \x03(\v2\x0e.linkedon.PostR\x05posts\"t\n" +
 	"\x04Post\x12\x1a\n" +
 	"\bauthorId\x18\x01 \x01(\x05R\bauthorId\x12\x16\n" +
 	"\x06postId\x18\x02 \x01(\x05R\x06postId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent2\xbf\x02\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x12\x1e\n" +
+	"\n" +
+	"authorName\x18\x04 \x01(\tR\n" +
+	"authorName2\xbf\x02\n" +
 	"\x0fLinkedonService\x12A\n" +
 	"\fCreatePerson\x12\x1d.linkedon.CreatePersonRequest\x1a\x12.linkedon.Response\x12A\n" +
 	"\fFollowPerson\x12\x1d.linkedon.FollowPersonRequest\x1a\x12.linkedon.Response\x123\n" +

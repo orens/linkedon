@@ -131,8 +131,8 @@ func (s *LinkedonServer) GetFeed(ctx context.Context, req *linkedon.GetFeedReque
 	posts := make([]*linkedon.Post, 0)
 	result, err := session.ExecuteRead(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
 		res, err := tx.Run(ctx, `
-		MATCH (person:Person {id: $personId})-[:FOLLOWS]->(followee:Person)-[:POSTS]->(post:Post)
-		RETURN post.id as postId, post.content as content, followee.id as authorId
+		MATCH (person:Person {id: $personId})-[:FOLLOWS]->(author:Person)-[:POSTS]->(post:Post)
+		RETURN author.name as authorName, post.id as postId, post.content as content, author.id as authorId
 	`, map[string]any{
 			"personId": personId,
 		})
@@ -148,7 +148,8 @@ func (s *LinkedonServer) GetFeed(ctx context.Context, req *linkedon.GetFeedReque
 			postId := properties["postId"].(int64)
 			content := properties["content"].(string)
 			authorId := properties["authorId"].(int64)
-			posts = append(posts, &linkedon.Post{AuthorId: int32(authorId), PostId: int32(postId), Content: content})
+			authorName := properties["authorName"].(string)
+			posts = append(posts, &linkedon.Post{AuthorId: int32(authorId), PostId: int32(postId), Content: content, AuthorName: authorName})
 		}
 		return records, nil
 	})

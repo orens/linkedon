@@ -54,4 +54,5 @@ message Post {
     int32 authorId = 1;
     int32 postId = 2;
     string content = 3;
+    string authorName = 4;
 }
