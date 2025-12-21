@@ -23,6 +23,10 @@ var followPersonCmd = &cobra.Command{
 			return fmt.Errorf("failed to convert followeeId to int: %v", err)
 		}
 		_, err = grpcClient.FollowPerson(context.Background(), &linkedon.FollowPersonRequest{FollowerId: int32(followerId), FolloweeId: int32(followeeId)})
+		if err != nil {
+			return fmt.Errorf("failed to follow person: %v", err)
+		}
+		fmt.Printf("followed person: %d followed %d\n", followerId, followeeId)
 		return err
 	},
 }
