@@ -8,6 +8,8 @@ service LinkedonService {
     rpc CreatePerson(CreatePersonRequest) returns (Response);
     rpc FollowPerson(FollowPersonRequest) returns (Response);
     rpc Reset(ResetRequest) returns (Response);
+    rpc Post(PostRequest) returns (Response);
+    rpc GetFeed(GetFeedRequest) returns (GetFeedResponse);
 }
 
 message Person {
@@ -26,10 +28,30 @@ message FollowPersonRequest {
     int32 followeeId = 2;
 }
 
+message PostRequest {
+    int32 personId = 1;
+    int32 postId = 2;
+    string content = 3;
+}
+
 message ResetRequest {
 }
 
 message Response {
     bool success = 1;
     string extra = 2;
+}
+
+message GetFeedRequest {
+    int32 personId = 1;
+}
+
+message GetFeedResponse {
+    repeated Post posts = 1;
+}
+
+message Post {
+    int32 authorId = 1;
+    int32 postId = 2;
+    string content = 3;
 }

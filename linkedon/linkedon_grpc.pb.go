@@ -22,6 +22,8 @@ const (
 	LinkedonService_CreatePerson_FullMethodName = "/linkedon.LinkedonService/CreatePerson"
 	LinkedonService_FollowPerson_FullMethodName = "/linkedon.LinkedonService/FollowPerson"
 	LinkedonService_Reset_FullMethodName        = "/linkedon.LinkedonService/Reset"
+	LinkedonService_Post_FullMethodName         = "/linkedon.LinkedonService/Post"
+	LinkedonService_GetFeed_FullMethodName      = "/linkedon.LinkedonService/GetFeed"
 )
 
 // LinkedonServiceClient is the client API for LinkedonService service.
@@ -31,6 +33,8 @@ type LinkedonServiceClient interface {
 	CreatePerson(ctx context.Context, in *CreatePersonRequest, opts ...grpc.CallOption) (*Response, error)
 	FollowPerson(ctx context.Context, in *FollowPersonRequest, opts ...grpc.CallOption) (*Response, error)
 	Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*Response, error)
+	Post(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*Response, error)
+	GetFeed(ctx context.Context, in *GetFeedRequest, opts ...grpc.CallOption) (*GetFeedResponse, error)
 }
 
 type linkedonServiceClient struct {
@@ -71,6 +75,26 @@ func (c *linkedonServiceClient) Reset(ctx context.Context, in *ResetRequest, opt
 	return out, nil
 }
 
+func (c *linkedonServiceClient) Post(ctx context.Context, in *PostRequest, opts ...grpc.CallOption) (*Response, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Response)
+	err := c.cc.Invoke(ctx, LinkedonService_Post_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *linkedonServiceClient) GetFeed(ctx context.Context, in *GetFeedRequest, opts ...grpc.CallOption) (*GetFeedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFeedResponse)
+	err := c.cc.Invoke(ctx, LinkedonService_GetFeed_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LinkedonServiceServer is the server API for LinkedonService service.
 // All implementations must embed UnimplementedLinkedonServiceServer
 // for forward compatibility.
@@ -78,6 +102,8 @@ type LinkedonServiceServer interface {
 	CreatePerson(context.Context, *CreatePersonRequest) (*Response, error)
 	FollowPerson(context.Context, *FollowPersonRequest) (*Response, error)
 	Reset(context.Context, *ResetRequest) (*Response, error)
+	Post(context.Context, *PostRequest) (*Response, error)
+	GetFeed(context.Context, *GetFeedRequest) (*GetFeedResponse, error)
 	mustEmbedUnimplementedLinkedonServiceServer()
 }
 
@@ -96,6 +122,12 @@ func (UnimplementedLinkedonServiceServer) FollowPerson(context.Context, *FollowP
 }
 func (UnimplementedLinkedonServiceServer) Reset(context.Context, *ResetRequest) (*Response, error) {
 	return nil, status.Error(codes.Unimplemented, "method Reset not implemented")
+}
+func (UnimplementedLinkedonServiceServer) Post(context.Context, *PostRequest) (*Response, error) {
+	return nil, status.Error(codes.Unimplemented, "method Post not implemented")
+}
+func (UnimplementedLinkedonServiceServer) GetFeed(context.Context, *GetFeedRequest) (*GetFeedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetFeed not implemented")
 }
 func (UnimplementedLinkedonServiceServer) mustEmbedUnimplementedLinkedonServiceServer() {}
 func (UnimplementedLinkedonServiceServer) testEmbeddedByValue()                         {}
@@ -172,6 +204,42 @@ func _LinkedonService_Reset_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LinkedonService_Post_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LinkedonServiceServer).Post(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LinkedonService_Post_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LinkedonServiceServer).Post(ctx, req.(*PostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LinkedonService_GetFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LinkedonServiceServer).GetFeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LinkedonService_GetFeed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LinkedonServiceServer).GetFeed(ctx, req.(*GetFeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LinkedonService_ServiceDesc is the grpc.ServiceDesc for LinkedonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +258,14 @@ var LinkedonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Reset",
 			Handler:    _LinkedonService_Reset_Handler,
+		},
+		{
+			MethodName: "Post",
+			Handler:    _LinkedonService_Post_Handler,
+		},
+		{
+			MethodName: "GetFeed",
+			Handler:    _LinkedonService_GetFeed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -92,3 +92,71 @@ func (s *LinkedonServer) Reset(ctx context.Context, req *linkedon.ResetRequest) 
 	return &linkedon.Response{Success: true, Extra: "Followed"}, nil
 }
 
+func (s *LinkedonServer) Post(ctx context.Context, req *linkedon.PostRequest) (*linkedon.Response, error) {
+	personId := req.GetPersonId()
+	postId := req.GetPostId()
+	content := req.GetContent()
+	if personId == 0 || postId == 0 || content == "" {
+		return nil, status.Error(codes.InvalidArgument, "personId, postId and content are required")
+	}
+	session := s.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: NEO4JDATABASE, AccessMode: neo4j.AccessModeWrite})
+	defer session.Close(ctx)
+	result, err := session.ExecuteWrite(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		return tx.Run(ctx, `
+		MATCH (person:Person {id: $personId})
+		CREATE (post:Post {id: $postId, content: $content})
+		CREATE (person)-[r:POSTS]->(post)
+		RETURN r
+	`, map[string]any{
+			"personId": personId,
+			"postId":   postId,
+			"content":  content,
+		})
+	})
+	if err != nil {
+		log.Printf("failed to post: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "failed to post: %v", err)
+	}
+	fmt.Printf("Posted: %v\n", result) // TODO
+	return &linkedon.Response{Success: true, Extra: "Posted"}, nil
+}
+
+func (s *LinkedonServer) GetFeed(ctx context.Context, req *linkedon.GetFeedRequest) (*linkedon.GetFeedResponse, error) {
+	personId := req.GetPersonId()
+	if personId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "personId is required")
+	}
+	session := s.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: NEO4JDATABASE, AccessMode: neo4j.AccessModeRead})
+	defer session.Close(ctx)
+	posts := make([]*linkedon.Post, 0)
+	result, err := session.ExecuteRead(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		res, err := tx.Run(ctx, `
+		MATCH (person:Person {id: $personId})-[:FOLLOWS]->(followee:Person)-[:POSTS]->(post:Post)
+		RETURN post.id as postId, post.content as content, followee.id as authorId
+	`, map[string]any{
+			"personId": personId,
+		})
+		if err != nil {
+			return nil, err
+		}
+		records, err := res.Collect(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, record := range records {
+			properties := record.AsMap()
+			postId := properties["postId"].(int64)
+			content := properties["content"].(string)
+			authorId := properties["authorId"].(int64)
+			posts = append(posts, &linkedon.Post{AuthorId: int32(authorId), PostId: int32(postId), Content: content})
+		}
+		return records, nil
+	})
+	if err != nil || result == nil {
+		log.Printf("failed to get feed: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "failed to get feed: %v", err)
+	}
+	fmt.Printf("Converting feed for user %d\n", personId)
+	// fmt.Printf("Records: %v\n", result.Summary().Counters)
+	return &linkedon.GetFeedResponse{Posts: posts}, nil
+}
